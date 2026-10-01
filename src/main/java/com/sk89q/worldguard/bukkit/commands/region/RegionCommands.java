@@ -507,7 +507,11 @@ public final class RegionCommands extends RegionCommandsBase {
                     list.append(", ");
                 }
                 
-                list.append(flag.getName());
+                if (DefaultFlag.SERVER_FLAGS.contains(flag)) {
+                    list.append(ChatColor.YELLOW).append(flag.getName()).append(ChatColor.RED);
+                } else {
+                    list.append(flag.getName());
+                }
             }
 
             sender.sendMessage(ChatColor.RED + "Unknown flag specified: " + flagName);

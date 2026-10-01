@@ -37,6 +37,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
@@ -65,6 +66,14 @@ public class WorldGuardEntityListener implements Listener {
      */
     public void registerEvents() {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        NaturalSpawns.registerGate(plugin);
+    }
+
+    @EventHandler
+    public void onPluginDisable(PluginDisableEvent event) {
+        if (event.getPlugin() == plugin) {
+            NaturalSpawns.unregisterGate(plugin);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -576,7 +585,9 @@ public class WorldGuardEntityListener implements Listener {
         if (wcfg.useRegions && cfg.useRegionsCreatureSpawnEvent) {
             ApplicableRegionSet set = plugin.getRegionContainer().createQuery().getApplicableRegions(eventLoc);
 
-            if (!set.allows(DefaultFlag.MOB_SPAWNING)) {
+            // Crucible checks natural spawns before the mob is built. This catches the rest, such as chunk generation.
+            if (NaturalSpawns.isNatural(event.getSpawnReason())
+                    && NaturalSpawns.denied(set, NaturalSpawns.isMonster(event.getEntity()))) {
                 event.setCancelled(true);
                 return;
             }

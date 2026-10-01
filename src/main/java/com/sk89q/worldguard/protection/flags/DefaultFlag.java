@@ -24,6 +24,10 @@ import org.bukkit.GameMode;
 import org.bukkit.WeatherType;
 import org.bukkit.entity.EntityType;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * The flags that are used in WorldGuard.
  */
@@ -72,7 +76,10 @@ public final class DefaultFlag {
     // These flags adjust behavior and are not checked in tandem with the
     // BUILD flag so they need to be TRUE for their defaults.
     public static final StateFlag MOB_DAMAGE = new StateFlag("mob-damage", true);
+    // The three spawning flags stop natural spawns only. Spawners, eggs, mods and plugins still spawn.
     public static final StateFlag MOB_SPAWNING = new StateFlag("mob-spawning", true);
+    public static final StateFlag MONSTER_SPAWNING = new StateFlag("monster-spawning", true);
+    public static final StateFlag ANIMAL_SPAWNING = new StateFlag("animal-spawning", true);
     public static final StateFlag CREEPER_EXPLOSION = new StateFlag("creeper-explosion", true);
     public static final StateFlag ENDERDRAGON_BLOCK_DAMAGE = new StateFlag("enderdragon-block-damage", true);
     public static final StateFlag GHAST_FIREBALL = new StateFlag("ghast-fireball", true);
@@ -142,7 +149,7 @@ public final class DefaultFlag {
     public static final Flag<?>[] flagsList = new Flag<?>[] {
             PASSTHROUGH, BUILD, CONSTRUCT, BLOCK_BREAK, BLOCK_PLACE, PVP, CHEST_ACCESS, PISTONS,
             TNT, LIGHTER, RIDE, USE, INTERACT, PLACE_VEHICLE, DESTROY_VEHICLE, DAMAGE_ANIMALS, SLEEP,
-            MOB_DAMAGE, MOB_SPAWNING, DENY_SPAWN, INVINCIBILITY, EXP_DROPS,
+            MOB_DAMAGE, MOB_SPAWNING, MONSTER_SPAWNING, ANIMAL_SPAWNING, DENY_SPAWN, INVINCIBILITY, EXP_DROPS,
             CREEPER_EXPLOSION, OTHER_EXPLOSION, ENDERDRAGON_BLOCK_DAMAGE, GHAST_FIREBALL, ENDER_BUILD,
             DENY_MESSAGE, ENTRY_DENY_MESSAGE, EXIT_DENY_MESSAGE, EXIT_OVERRIDE, EXIT_VIA_TELEPORT,
             GREET_MESSAGE, FAREWELL_MESSAGE, NOTIFY_ENTER, NOTIFY_LEAVE,
@@ -156,6 +163,10 @@ public final class DefaultFlag {
             TELE_LOC, SPAWN_LOC, POTION_SPLASH, TIME_LOCK, WEATHER_LOCK,
             BLOCKED_CMDS, ALLOWED_CMDS, PRICE, BUYABLE, ENABLE_SHOP
     };
+
+    /** Flags added for this server. The flag list shows them in yellow. */
+    public static final Set<Flag<?>> SERVER_FLAGS = new HashSet<Flag<?>>(Arrays.<Flag<?>>asList(
+            MOB_SPAWNING, MONSTER_SPAWNING, ANIMAL_SPAWNING));
 
     private DefaultFlag() {
     }
